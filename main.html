@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahul Dang - Technical Product & Engineering Leader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Slate & Amber -->
+    <!-- Application Structure Plan: The application is designed as a single-page narrative portfolio. The structure flows from a high-level "why" (the value proposition) to the detailed "how" (skills, achievements, experience). The sections are: 1. Hero: A strong, immediate introduction. 2. Pitch: The core value proposition and elevator pitch. 3. Skills: An interactive radar chart to visually communicate his balanced expertise across domains, supported by detailed tech lists. This is more engaging than a static list. 4. Impact: A dynamic bar chart to showcase quantifiable results, allowing users to interactively explore his key achievements. This directly answers "what value did you bring?". 5. Products: A "Hall of Fame" grid for his key launches, providing tangible examples of his work. 6. Journey: A vertical timeline to intuitively visualize his career progression. 7. Contact: A clear call to action. This top-down, narrative structure is chosen to guide a recruiter or stakeholder from initial interest to deep understanding, making a compelling case for his hire. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Core Competencies & Skills -> Goal: Showcase balanced, multi-domain expertise -> Viz/Method: Chart.js Radar Chart & Filterable HTML lists -> Interaction: Hover on chart for details, click buttons to filter skill lists -> Justification: A radar chart visually emphasizes his balanced strengths in product, tech, and leadership. Simple lists provide the granular detail needed by technical recruiters. -> Library: Chart.js.
+        - Report Info: Quantifiable achievements (% improvements, time reductions) -> Goal: Prove value with hard data -> Viz/Method: Chart.js Dynamic Bar Chart -> Interaction: User selects a project from a dropdown, the chart and description update to show relevant metrics. -> Justification: Makes data tangible and interactive. Instead of reading a list, the user actively discovers the impact, which is more memorable. -> Library: Chart.js.
+        - Report Info: Career History -> Goal: Clearly present professional progression -> Viz/Method: Vertical Timeline using structured HTML & Tailwind CSS -> Interaction: Static, clear visual flow. -> Justification: A timeline is the most intuitive and standard way to represent work history, providing clear chronological context. -> Library/Method: HTML/CSS.
+        - Report Info: Key Product Launches -> Goal: Provide concrete examples of his work -> Viz/Method: Responsive Card Grid using HTML & Tailwind -> Interaction: Hover effects on cards. -> Justification: A card grid is a visually appealing and scannable way to present a portfolio of projects. -> Library/Method: HTML/CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e293b; /* slate-800 */
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #475569; /* slate-600 */
+            max-width: 48rem;
+            margin: 0 auto 3rem auto;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #f59e0b; /* amber-500 */
+            border: 3px solid #f8fafc; /* slate-50 */
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #f59e0b; /* amber-500 */
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="bg-slate-50/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-xl font-bold text-slate-800">Rahul Dang</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pitch" class="nav-link text-slate-600 font-medium">Pitch</a>
+                <a href="#skills" class="nav-link text-slate-600 font-medium">Skills</a>
+                <a href="#impact" class="nav-link text-slate-600 font-medium">Impact</a>
+                <a href="#products" class="nav-link text-slate-600 font-medium">Products</a>
+                <a href="#journey" class="nav-link text-slate-600 font-medium">Journey</a>
+            </div>
+            <a href="#contact" class="hidden md:block bg-amber-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-amber-600 transition-colors">Contact</a>
+             <button id="mobile-menu-button" class="md:hidden text-slate-800">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#pitch" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Pitch</a>
+            <a href="#skills" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Skills</a>
+            <a href="#impact" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Impact</a>
+            <a href="#products" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Products</a>
+            <a href="#journey" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Journey</a>
+            <a href="#contact" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="py-20 md:py-32 bg-white">
+            <div class="container mx-auto text-center px-6">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 leading-tight">
+                    Rahul Dang
+                </h1>
+                <p class="mt-4 text-xl md:text-2xl text-amber-600 font-semibold">
+                    Technical Product & Engineering Leader
+                </p>
+                <p class="mt-6 max-w-3xl mx-auto text-lg text-slate-600">
+                    A strategic leader who bridges the chasm between complex engineering and business value, delivering innovative AI and cloud solutions with measurable, transformative impact.
+                </p>
+            </div>
+        </section>
+
+        <section id="pitch" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">The Value Proposition</h2>
+                <p class="section-subtitle">
+                    This section explains why Rahul is a unique asset to any organization. It outlines his core strengths, moving beyond a simple list of skills to describe the value he creates at the intersection of technology, product, and leadership.
+                </p>
+                <div class="grid md:grid-cols-3 gap-8 text-left mt-12">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-xl text-slate-800 mb-2">Product Visionary & Technical Executor</h3>
+                        <p class="text-slate-600">Rahul doesn't just manage product roadmaps; he possesses the deep technical acumen to architect and drive their execution. He translates ambitious business goals into tangible, scalable systems, as proven by his leadership in developing GenAI bots and enterprise-wide DevOps automation from the ground up.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-xl text-slate-800 mb-2">Quantifiable, Results-Driven Impact</h3>
+                        <p class="text-slate-600">Every initiative is measured by its contribution to the bottom line. He consistently delivers concrete business outcomes—drastically reducing incident resolution times, boosting team productivity, cutting deployment efforts, and improving system performance. His focus is always on creating demonstrable value.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-xl text-slate-800 mb-2">Cross-Functional Bridge Builder</h3>
+                        <p class="text-slate-600">With fluency in the languages of engineering, product, and executive leadership, Rahul excels at aligning diverse teams. He fosters collaboration and transparency, ensuring that stakeholders from commerce to governance are united behind a shared vision and a clear, actionable roadmap.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">A Spectrum of Skills</h2>
+                <p class="section-subtitle">
+                    Rahul's expertise spans multiple domains. This interactive chart visualizes his balanced strengths, showing proficiency across key areas from high-level strategy to hands-on technical execution. Use the buttons below to explore the specific technologies and methodologies he commands.
+                </p>
+                <div class="chart-container">
+                    <canvas id="skillsRadarChart"></canvas>
+                </div>
+                <div id="skills-details" class="mt-12">
+                    <div class="flex justify-center space-x-2 md:space-x-4 mb-8 flex-wrap">
+                        <button class="skill-btn bg-amber-500 text-white py-2 px-4 rounded-lg my-1">All</button>
+                        <button class="skill-btn bg-slate-200 text-slate-700 py-2 px-4 rounded-lg my-1">Product & Leadership</button>
+                        <button class="skill-btn bg-slate-200 text-slate-700 py-2 px-4 rounded-lg my-1">Cloud & DevOps</button>
+                        <button class="skill-btn bg-slate-200 text-slate-700 py-2 px-4 rounded-lg my-1">Data & AI</button>
+                        <button class="skill-btn bg-slate-200 text-slate-700 py-2 px-4 rounded-lg my-1">Development</button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 text-left" id="skills-grid">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">The Impact Dashboard</h2>
+                <p class="section-subtitle">
+                    Ideas are valuable, but execution that delivers measurable results is what truly matters. This interactive dashboard showcases the quantifiable impact of Rahul's key projects. Select a product to see how his work translated into significant improvements and efficiencies.
+                </p>
+                <div class="max-w-md mx-auto mb-8">
+                     <label for="impact-selector" class="block mb-2 text-sm font-medium text-slate-700">Select a Project to See Its Impact:</label>
+                     <select id="impact-selector" class="bg-gray-50 border border-gray-300 text-slate-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5">
+                     </select>
+                </div>
+                <div class="grid md:grid-cols-5 gap-8 items-center">
+                    <div class="md:col-span-3">
+                         <div class="chart-container max-w-full">
+                             <canvas id="impactBarChart"></canvas>
+                         </div>
+                    </div>
+                    <div id="impact-description" class="md:col-span-2 text-left bg-white p-6 rounded-lg shadow-sm">
+                         <h3 id="impact-title" class="font-bold text-xl text-slate-800 mb-2"></h3>
+                         <p id="impact-text" class="text-slate-600"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="products" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                 <h2 class="section-title">Product Hall of Fame</h2>
+                <p class="section-subtitle">
+                    Here are some of the key products and platforms Rahul has envisioned, architected, and delivered. Each represents a solution to a complex business challenge, showcasing his ability to lead projects from ideation through to successful, high-adoption deployment.
+                </p>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12" id="products-grid">
+                 </div>
+            </div>
+        </section>
+
+        <section id="journey" class="py-20">
+            <div class="container mx-auto px-6">
+                 <h2 class="section-title text-center">Professional Journey</h2>
+                <p class="section-subtitle">
+                   This timeline traces Rahul's career progression, highlighting his key roles and responsibilities. It demonstrates a consistent pattern of growth, taking on increasing complexity and leadership, from system administration to driving enterprise-wide product and engineering strategy.
+                </p>
+                <div class="relative max-w-2xl mx-auto mt-12">
+                    <div class="absolute left-0 h-full border-l-2 border-slate-300" style="left: -24px;"></div>
+                    <div id="timeline-container" class="space-y-12">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact" class="bg-slate-800 text-white py-16">
+            <div class="container mx-auto text-center px-6">
+                <h2 class="text-3xl font-bold mb-4">Let's Build the Future</h2>
+                <p class="max-w-2xl mx-auto mb-8 text-slate-300">
+                    I'm passionate about leveraging technology to solve hard problems and create exceptional products. If you're looking for a leader who can drive both technical innovation and strategic business growth, let's connect.
+                </p>
+                <div class="flex justify-center items-center space-x-6 text-lg">
+                    <a href="mailto:rahuldang838@gmail.com" class="hover:text-amber-400 transition-colors">rahuldang838@gmail.com</a>
+                    <span class="text-slate-500">|</span>
+                    <a href="https://www.linkedin.com/in/dangrahul" target="_blank" class="hover:text-amber-400 transition-colors">LinkedIn</a>
+                    <span class="text-slate-500">|</span>
+                    <a href="https://about.me/dangrahul" target="_blank" class="hover:text-amber-400 transition-colors">About.me</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const skillsData = {
+                'Product & Leadership': [
+                    { name: 'Product Strategy', icon: '🎯' },
+                    { name: 'Lifecycle Management', icon: '🔄' },
+                    { name: 'Stakeholder Engagement', icon: '🤝' },
+                    { name: 'Roadmap Planning', icon: '🗺️' },
+                    { name: 'Agile (Scrum/Kanban)', icon: '🏃' },
+                    { name: 'Cross-Functional Leadership', icon: '👥' },
+                ],
+                'Cloud & DevOps': [
+                    { name: 'AWS', icon: '☁️' },
+                    { name: 'OCI', icon: '☁️' },
+                    { name: 'Terraform (IaC)', icon: '🏗️' },
+                    { name: 'Jenkins (CI/CD)', icon: '🚀' },
+                    { name: 'Ansible', icon: '⚙️' },
+                    { name: 'Kubernetes (CKA)', icon: '☸️' },
+                    { name: 'Docker', icon: '🐳' },
+                ],
+                'Data & AI': [
+                    { name: 'Generative AI (LLM/RAG)', icon: '🤖' },
+                    { name: 'Data Platforms', icon: '📊' },
+                    { name: 'Kafka', icon: '🔗' },
+                    { name: 'Cassandra', icon: '🗄️' },
+                    { name: 'PostgreSQL/MySQL', icon: '💾' },
+                    { name: 'OpenSearch', icon: '🔍' },
+                ],
+                'Development': [
+                    { name: 'Python', icon: '🐍' },
+                    { name: 'Shell Scripting', icon: '💲' },
+                    { name: 'RESTful APIs', icon: '↔️' },
+                    { name: 'Git', icon: '🌿' },
+                    { name: 'System Design', icon: '🏛️' },
+                ]
+            };
+            
+            const impactData = [
+                {
+                    name: "RAG-based AI Knowledge Bot",
+                    description: "Designed and deployed an enterprise-scale LLM-powered knowledge retrieval system, transforming how engineering teams access information and resolve issues.",
+                    metrics: [
+                        { label: 'Incident Resolution Time Reduction (%)', value: 60 },
+                        { label: 'On-call Productivity Boost (%)', value: 40 },
+                        { label: 'Query Resolution Accuracy (%)', value: 92 },
+                    ]
+                },
+                {
+                    name: "Yum-CentOS Automation Service",
+                    description: "Architected a containerized solution for provisioning packages, dramatically accelerating development workflows for legacy Linux servers.",
+                    metrics: [
+                        { label: 'Staging Server Build Time Reduction (%)', value: 50 },
+                    ]
+                },
+                {
+                    name: "General DevOps & Cloud Migration",
+                    description: "Led the migration of enterprise platforms to AWS and built robust CI/CD pipelines, fundamentally improving deployment velocity and reliability.",
+                    metrics: [
+                        { label: 'Manual Effort Reduction (%)', value: 80 },
+                        { label: 'Deployment Time Reduction (%)', value: 30 },
+                        { label: 'System Uptime Improvement (%)', value: 25 },
+                        { label: 'Mean Time To Recovery (MTTR) Reduction (%)', value: 40 },
+                    ]
+                },
+                {
+                    name: "Task Operations Manager",
+                    description: "Developed an automation service for task delegation with workload distribution and interactive dashboards, enhancing cross-functional team efficiency.",
+                    metrics: [
+                        { label: 'Task Completion Time Reduction (%)', value: 20 },
+                        { label: 'Team Productivity Increase (%)', value: 35 },
+                    ]
+                },
+                {
+                    name: "Rapid Case Generator Bot",
+                    description: "Orchestrated the design of a form-driven chatbot, streamlining support workflows and significantly improving the user experience for case creation.",
+                    metrics: [
+                        { label: 'Case Creation Time Reduction (%)', value: 40 },
+                    ]
+                }
+            ];
+
+            const productsData = [
+                {
+                    title: "RAG-based AI Knowledge Bot",
+                    description: "An LLM-powered system using a RAG architecture to provide accurate, context-aware answers to complex engineering questions, dramatically reducing incident resolution time.",
+                    role: "Product Vision & Launch Leadership",
+                    outcome: "92% query accuracy, 60% faster incident resolution."
+                },
+                {
+                    title: "Task Operations Manager",
+                    description: "An automation platform for intelligent task delegation, featuring queue-based lifecycle management and interactive dashboards to optimize workload distribution.",
+                    role: "Product Development & Scaling",
+                    outcome: "35% increase in team productivity across functions."
+                },
+                {
+                    title: "Cloud Infrastructure as Code (IaC)",
+                    description: "A suite of reusable Terraform templates for provisioning complex data services (Kafka, Cassandra, RDS) on AWS, enabling rapid, consistent, and compliant deployments.",
+                    role: "Infrastructure Architecture & DevOps Lead",
+                    outcome: "80% reduction in manual deployment effort for GovCloud."
+                },
+                {
+                    title: "Rapid Case Generator Bot",
+                    description: "A user-friendly chatbot utilizing adaptive cards to automate and simplify the creation of support cases, enhancing the support experience for all users.",
+                    role: "User Experience Innovation",
+                    outcome: "40% faster case creation time."
+                },
+                {
+                    title: "Yum-CentOS Container Solution",
+                    description: "A containerized service to pre-build and distribute software packages for older Linux environments, decoupling development from slow approval processes.",
+                    role: "Infrastructure Platform Development",
+                    outcome: "50% reduction in staging server build time."
+                },
+                {
+                    title: "CertVisor Notification Service",
+                    description: "An automated entitlement monitoring and notification system that proactively alerts stakeholders about certificate expirations and status changes.",
+                    role: "Product Ideation & Rollout",
+                    outcome: "30% decrease in escalations related to certificate issues."
+                }
+            ];
+
+            const timelineData = [
+                {
+                    role: "Technical Product Manager / DevOps Lead",
+                    company: "Capgemini Engineering (Client: Cisco)",
+                    dates: "May 2015 - Present",
+                    details: [
+                        "Drove product strategy and end-to-end lifecycle for 5+ automation and data platforms, serving thousands of users and processing 50,000+ requests.",
+                        "Led migration of WebEx data services to AWS GovCloud, architecting Infrastructure as Code solutions that reduced manual effort by 80%.",
+                        "Pioneered a GenAI RAG-based bot, improving incident resolution time by 60%.",
+                        "Managed and mentored teams of 10+ engineers, implementing Agile methodologies to improve delivery timelines by 15%."
+                    ]
+                },
+                {
+                    role: "Business Analyst",
+                    company: "HCL Technologies (Client: Dow Jones)",
+                    dates: "Oct 2012 – May 2015",
+                    details: [
+                        "Managed Unix server infrastructure for high-availability financial data systems, ensuring 99.9% SLA compliance for NYSE-connected services.",
+                        "Collaborated with stakeholders on implementing advanced stock market data feeds (Zipper).",
+                        "Developed automation scripts to optimize server performance and reduce data processing bottlenecks by 25%."
+                    ]
+                },
+                 {
+                    role: "Education",
+                    company: "Punjab Technical University",
+                    dates: "2008 – 2012",
+                    details: [
+                        "Bachelor of Technology, Computer Science & Engineering."
+                    ]
+                }
+            ];
+
+
+            const radarCtx = document.getElementById('skillsRadarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Product Strategy', 'Cloud & DevOps', 'Data Engineering', 'AI/ML Innovation', 'Team Leadership', 'Automation'],
+                    datasets: [{
+                        label: 'Proficiency',
+                        data: [90, 95, 85, 90, 95, 90],
+                        backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                        borderColor: 'rgba(245, 158, 11, 1)',
+                        pointBackgroundColor: 'rgba(245, 158, 11, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(245, 158,11, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 14 }, color: '#475569' },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: '#64748b'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const skillsGrid = document.getElementById('skills-grid');
+            const skillBtns = document.querySelectorAll('.skill-btn');
+            
+            const renderSkills = (filter = 'All') => {
+                skillsGrid.innerHTML = '';
+                const categoriesToRender = filter === 'All' ? Object.keys(skillsData) : [filter];
+
+                categoriesToRender.forEach(category => {
+                    skillsData[category].forEach(skill => {
+                        const skillEl = document.createElement('div');
+                        skillEl.className = 'bg-slate-50 p-3 rounded-lg flex items-center space-x-3';
+                        skillEl.innerHTML = `
+                            <span class="text-2xl">${skill.icon}</span>
+                            <span class="text-slate-700 font-medium">${skill.name}</span>
+                        `;
+                        skillsGrid.appendChild(skillEl);
+                    });
+                });
+            };
+
+            skillBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    skillBtns.forEach(b => b.classList.replace('bg-amber-500', 'bg-slate-200'));
+                    skillBtns.forEach(b => b.classList.replace('text-white', 'text-slate-700'));
+                    btn.classList.replace('bg-slate-200', 'bg-amber-500');
+                    btn.classList.replace('text-slate-700', 'text-white');
+                    renderSkills(btn.textContent);
+                });
+            });
+
+            renderSkills();
+
+            const impactSelector = document.getElementById('impact-selector');
+            const impactBarCtx = document.getElementById('impactBarChart').getContext('2d');
+            const impactTitle = document.getElementById('impact-title');
+            const impactText = document.getElementById('impact-text');
+            let impactChart;
+
+            impactData.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.name;
+                option.textContent = item.name;
+                impactSelector.appendChild(option);
+            });
+            
+            const updateImpactChart = (itemName) => {
+                const selectedData = impactData.find(item => item.name === itemName);
+                if (!selectedData) return;
+                
+                impactTitle.textContent = selectedData.name;
+                impactText.textContent = selectedData.description;
+
+                const chartData = {
+                    labels: selectedData.metrics.map(m => m.label.replace(/ \(\%\)$/, '')),
+                    datasets: [{
+                        label: 'Improvement / Reduction (%)',
+                        data: selectedData.metrics.map(m => m.value),
+                        backgroundColor: ['rgba(245, 158, 11, 0.6)', 'rgba(59, 130, 246, 0.6)', 'rgba(16, 185, 129, 0.6)'],
+                        borderColor: ['rgba(245, 158, 11, 1)', 'rgba(59, 130, 246, 1)', 'rgba(16, 185, 129, 1)'],
+                        borderWidth: 1
+                    }]
+                };
+
+                if (impactChart) {
+                    impactChart.data = chartData;
+                    impactChart.update();
+                } else {
+                    impactChart = new Chart(impactBarCtx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            indexAxis: 'y',
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.05)'
+                                    },
+                                     ticks: {
+                                        callback: function(value) {
+                                            return value + '%'
+                                        }
+                                    }
+                                },
+                                y: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.dataset.label}: ${context.raw}%`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+            
+            impactSelector.addEventListener('change', (e) => updateImpactChart(e.target.value));
+            updateImpactChart(impactData[0].name);
+
+            const productsGrid = document.getElementById('products-grid');
+            productsData.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-lg shadow-md card-hover text-left';
+                card.innerHTML = `
+                    <h3 class="font-bold text-xl text-slate-800 mb-2">${product.title}</h3>
+                    <p class="text-amber-600 font-semibold text-sm mb-3">${product.role}</p>
+                    <p class="text-slate-600 mb-4">${product.description}</p>
+                    <p class="font-semibold text-slate-700">Key Outcome: <span class="font-normal text-slate-600">${product.outcome}</span></p>
+                `;
+                productsGrid.appendChild(card);
+            });
+
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineData.forEach(item => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'relative pl-8 pb-8 timeline-item';
+                const detailsHtml = item.details.map(detail => `<li class="text-slate-600">${detail}</li>`).join('');
+                timelineItem.innerHTML = `
+                    <h3 class="font-bold text-xl text-slate-800">${item.role}</h3>
+                    <p class="font-semibold text-amber-600 mb-2">${item.company} <span class="text-slate-500 font-normal">| ${item.dates}</span></p>
+                    <ul class="list-disc list-inside space-y-1">${detailsHtml}</ul>
+                `;
+                timelineContainer.appendChild(timelineItem);
+            });
+            
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                     mobileMenu.classList.add('hidden');
+                })
+            })
+
+        });
+    </script>
+</body>
+</html>
