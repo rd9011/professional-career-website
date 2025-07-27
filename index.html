@@ -10,12 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Slate & Amber -->
-    <!-- Application Structure Plan: The application is designed as a single-page narrative portfolio. The structure flows from a high-level "why" (the value proposition) to the detailed "how" (skills, achievements, experience). The sections are: 1. Hero: A strong, immediate introduction. 2. Pitch: The core value proposition and elevator pitch. 3. Skills: An interactive radar chart to visually communicate his balanced expertise across domains, supported by detailed tech lists. This is more engaging than a static list. 4. Impact: A dynamic bar chart to showcase quantifiable results, allowing users to interactively explore his key achievements. This directly answers "what value did you bring?". 5. Products: A "Hall of Fame" grid for his key launches, providing tangible examples of his work. 6. Journey: A vertical timeline to intuitively visualize his career progression. 7. Contact: A clear call to action. This top-down, narrative structure is chosen to guide a recruiter or stakeholder from initial interest to deep understanding, making a compelling case for his hire. -->
+    <!-- Application Structure Plan: The application is designed as a single-page narrative portfolio. The structure flows from a high-level "why" (the value proposition) to the detailed "how" (skills, achievements, experience). The sections are: 1. Hero: A strong, immediate introduction. 2. Pitch: The core value proposition and elevator pitch. 3. Skills: An interactive radar chart to visually communicate his balanced expertise across domains, supported by detailed tech lists. This is more engaging than a static list. 4. Impact: A dynamic bar chart to showcase quantifiable results, allowing users to interactively explore his key achievements. This directly answers "what value did you bring?". 5. Credentials & Accolades: A dedicated section for formal certifications, providing proof of expertise. 6. Products: A "Hall of Fame" grid for his key launches, providing tangible examples of his work. 7. Journey: A vertical timeline to intuitively visualize his career progression. 8. Contact: A clear call to action. This top-down, narrative structure is chosen to guide a recruiter or stakeholder from initial interest to deep understanding, making a compelling case for his hire. -->
     <!-- Visualization & Content Choices: 
         - Report Info: Core Competencies & Skills -> Goal: Showcase balanced, multi-domain expertise -> Viz/Method: Chart.js Radar Chart & Filterable HTML lists -> Interaction: Hover on chart for details, click buttons to filter skill lists -> Justification: A radar chart visually emphasizes his balanced strengths in product, tech, and leadership. Simple lists provide the granular detail needed by technical recruiters. -> Library: Chart.js.
         - Report Info: Quantifiable achievements (% improvements, time reductions) -> Goal: Prove value with hard data -> Viz/Method: Chart.js Dynamic Bar Chart -> Interaction: User selects a project from a dropdown, the chart and description update to show relevant metrics. -> Justification: Makes data tangible and interactive. Instead of reading a list, the user actively discovers the impact, which is more memorable. -> Library: Chart.js.
-        - Report Info: Career History -> Goal: Clearly present professional progression -> Viz/Method: Vertical Timeline using structured HTML & Tailwind CSS -> Interaction: Static, clear visual flow. -> Justification: A timeline is the most intuitive and standard way to represent work history, providing clear chronological context. -> Library/Method: HTML/CSS.
-        - Report Info: Key Product Launches -> Goal: Provide concrete examples of his work -> Viz/Method: Responsive Card Grid using HTML & Tailwind -> Interaction: Hover effects on cards. -> Justification: A card grid is a visually appealing and scannable way to present a portfolio of projects. -> Library/Method: HTML/CSS.
+        - Report Info: Certifications -> Goal: Present formal qualifications clearly -> Viz/Method: Dynamic Certification Card Layout (HTML/CSS/JS) -> Interaction: Click on "Next" button to cycle through certifications, or click on a title in the list to view its details. -> Justification: This interactive layout provides a structured and engaging way to present multiple certifications, allowing users to focus on one at a time while still seeing the full list. -> Library/Method: HTML/CSS/JS.
+        - Report Info: Career History -> Goal: Clearly present professional progression -> Viz/Method: Vertical Timeline using structured HTML & Tailwind CSS -> Interaction: Static, clear visual flow. -> Justification: A timeline is the most intuitive and standard way to represent work history, providing clear chronological context. -> Library: HTML/CSS.
+        - Report Info: Key Product Launches -> Goal: Provide concrete examples of his work -> Viz/Method: Dynamic Product Card Layout (HTML/CSS/JS) -> Interaction: Click on any product card to bring it to a prominent central position, with others rearranging around it. -> Justification: This interactive layout allows for efficient space usage while enabling users to drill down into product details on demand, enhancing engagement and focus. -> Library/Method: HTML/CSS/JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -74,6 +75,29 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
+        /* Specific styling for the display areas */
+        .display-card {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 800px; /* Limit width for readability */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .title-list-item {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .title-list-item:hover {
+            color: #f59e0b; /* amber-500 */
+        }
+        .title-list-item.active {
+            font-weight: 600;
+            color: #f59e0b; /* amber-500 */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -85,6 +109,7 @@
                 <a href="#pitch" class="nav-link text-slate-600 font-medium">Pitch</a>
                 <a href="#skills" class="nav-link text-slate-600 font-medium">Skills</a>
                 <a href="#impact" class="nav-link text-slate-600 font-medium">Impact</a>
+                <a href="#credentials" class="nav-link text-slate-600 font-medium">Credentials</a>
                 <a href="#products" class="nav-link text-slate-600 font-medium">Products</a>
                 <a href="#journey" class="nav-link text-slate-600 font-medium">Journey</a>
             </div>
@@ -97,6 +122,7 @@
             <a href="#pitch" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Pitch</a>
             <a href="#skills" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Skills</a>
             <a href="#impact" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Impact</a>
+            <a href="#credentials" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Credentials</a>
             <a href="#products" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Products</a>
             <a href="#journey" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Journey</a>
             <a href="#contact" class="block py-2 px-4 text-sm text-slate-600 hover:bg-slate-200">Contact</a>
@@ -188,19 +214,44 @@
                 </div>
             </div>
         </section>
+
+        <section id="credentials" class="py-20 bg-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title">Credentials & Accolades</h2>
+                <p class="section-subtitle">
+                    Beyond practical experience, Rahul continually invests in formal learning and certification to stay at the forefront of technology and leadership. This section highlights his key professional certifications and badges, validating his expertise across various critical domains.
+                </p>
+                <div id="certification-display-area" class="display-card text-left">
+                    <!-- Certification details will be rendered here -->
+                </div>
+                <button id="next-certification-btn" class="bg-amber-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-600 transition-colors mt-8 mb-8">
+                    Next Certification
+                </button>
+                <div id="certification-titles-list" class="flex flex-wrap justify-center gap-4 text-slate-600 text-lg font-medium">
+                    <!-- Certification titles will be rendered here as clickable links -->
+                </div>
+            </div>
+        </section>
         
-        <section id="products" class="py-20 bg-white">
+        <section id="products" class="py-20">
             <div class="container mx-auto px-6 text-center">
                  <h2 class="section-title">Product Hall of Fame</h2>
                 <p class="section-subtitle">
-                    Here are some of the key products and platforms Rahul has envisioned, architected, and delivered. Each represents a solution to a complex business challenge, showcasing his ability to lead projects from ideation through to successful, high-adoption deployment.
+                    Here are some of the key products and platforms Rahul has envisioned, architected, and delivered. Explore them below.
                 </p>
-                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12" id="products-grid">
+                 <div id="product-display-area" class="display-card text-left">
+                    <!-- Product details will be rendered here -->
+                 </div>
+                 <button id="next-product-btn" class="bg-amber-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-amber-600 transition-colors mt-8 mb-8">
+                    Next Product
+                 </button>
+                 <div id="product-titles-list" class="flex flex-wrap justify-center gap-4 text-slate-600 text-lg font-medium">
+                    <!-- Product titles will be rendered here as clickable links -->
                  </div>
             </div>
         </section>
 
-        <section id="journey" class="py-20">
+        <section id="journey" class="py-20 bg-white">
             <div class="container mx-auto px-6">
                  <h2 class="section-title text-center">Professional Journey</h2>
                 <p class="section-subtitle">
@@ -271,6 +322,15 @@
             
             const impactData = [
                 {
+                    name: "Talk to Your Data (Splunk AI POC)",
+                    description: "Pioneered a solution to democratize data access by transforming natural language queries into powerful Splunk SPL using an LLM on AWS SageMaker. This enables non-technical users to extract insights from complex data sources effortlessly.",
+                    metrics: [
+                        { label: 'Data Accessibility Improvement', value: 90 },
+                        { label: 'Query Formulation Time Reduction (Conceptual %)', value: 70 },
+                        { label: 'Insight Generation Efficiency (Conceptual %)', value: 60 }
+                    ]
+                },
+                {
                     name: "RAG-based AI Knowledge Bot",
                     description: "Designed and deployed an enterprise-scale LLM-powered knowledge retrieval system, transforming how engineering teams access information and resolve issues.",
                     metrics: [
@@ -313,38 +373,139 @@
                 }
             ];
 
+            const certificationsData = [
+                {
+                    id: "agentic-ai-project-ready",
+                    name: "Agentic AI Project Ready Proficient",
+                    issuingBody: "Microsoft Global Partner Solutions (GPS)",
+                    description: "This badge signifies the holder's ability to complete advanced modules and labs on multi-agent AI development, optimization, and production at scale, culminating in a successful capstone project. It demonstrates cutting-edge, practical AI implementation skills."
+                },
+                {
+                    id: "agentic-ai-solution-architect",
+                    name: "Agentic AI Solution Architect Proficient",
+                    issuingBody: "Microsoft Global Partner Solutions (GPS)",
+                    description: "This badge signifies the holder's ability to complete modules and labs focused on showcasing AI potential with Agentic AI and architecting multi-agent AI systems, followed by a successful solution architecture assessment. It highlights architectural prowess in advanced AI."
+                },
+                {
+                    id: "cka",
+                    name: "CKA: Certified Kubernetes Administrator",
+                    issuingBody: "The Linux Foundation",
+                    description: "Certified individuals demonstrate the skills, knowledge, and competencies to perform the responsibilities of a Kubernetes Administrator, including application lifecycle management, networking, security, and troubleshooting. A highly recognized and rigorous cloud-native certification."
+                },
+                {
+                    id: "oci-architect-professional",
+                    name: "Oracle Cloud Infrastructure 2021 Architect Professional",
+                    issuingBody: "Oracle",
+                    description: "This certification demonstrates hands-on experience and knowledge required to plan, design, implement, and operate solutions on Oracle Cloud Infrastructure at a professional level."
+                },
+                {
+                    id: "applied-data-science-ii",
+                    name: "Applied Data Science II: Machine Learning & Statistical Analysis (with honors)",
+                    issuingBody: "WorldQuant University",
+                    description: "Certified individuals are able to build machine learning models for predictions on real-world data, including data treatment, model selection, tuning, and working with text and time series data using scikit-learn. The 'with honors' adds significant weight."
+                },
+                {
+                    id: "applied-data-science-i",
+                    name: "Applied Data Science I: Scientific Computing & Python (with honors)",
+                    issuingBody: "WorldQuant University",
+                    description: "Certified individuals have completed a comprehensive introduction to scientific computing, Python, and related tools used by data scientists. They can use Python to read, clean, process, and analyze real-world data by following good programming practices such as using functions, choosing the appropriate data structures, and writing readable, maintainable code. To determine the statistical significance of the results of their analysis, they can apply statistical analysis and hypothesis testing. Also 'with honors.'"
+                },
+                {
+                    id: "google-it-automation",
+                    name: "Google IT Automation with Python Professional Certificate",
+                    issuingBody: "Coursera (developed by Google)",
+                    description: "This certificate provides IT professionals with in-demand IT automation skills, including Python and Git, with a special focus on how this applies to automating tasks in IT support and systems administration. Highly practical for DevOps and SRE roles."
+                },
+                {
+                    id: "aha-product-management",
+                    name: "Aha! Product Management Professional Certificate",
+                    issuingBody: "Aha!",
+                    description: "This professional certificate enhances product management skills with a focus on strategic planning and road mapping for product success, endorsed by a leader in product development software."
+                },
+                {
+                    id: "splunk-power-user",
+                    name: "Splunk Certified Power User 6.x",
+                    issuingBody: "Splunk",
+                    description: "This entry-level certification validates the holder's ability to navigate and utilize Splunk software, including SPL searching and reporting commands. It demonstrates a solid understanding of Splunk basics and the ability to solve complex data problems using Splunk."
+                },
+                {
+                    id: "connected-manager",
+                    name: "Connected Manager",
+                    issuingBody: "Harvard Mentor and Capgemini University",
+                    description: "Created in partnership with Harvard Business Publishing, the Connected Manager program provides managers with the skills, connections, tools, and support they need to deliver consistent people and team management. This program changes participants’ mindsets, behaviors, and practices, highlighting leadership."
+                },
+                {
+                    id: "cisco-security-ninja",
+                    name: "Cisco Security Ninja Green Belt 2018",
+                    issuingBody: "Cisco",
+                    description: "This designation represents achievement in Cisco's security training program, signifying foundational security knowledge and role-specific expertise. Attaining the Green Belt implies completion of all previous belt levels, starting from White."
+                },
+                {
+                    id: "telecommunications-l2",
+                    name: "Telecommunications Level 2 Certification",
+                    issuingBody: "Capgemini University",
+                    description: "As a result of holding the Telecommunications L2 certification, the certified individual is able to build credibility to manage and execute initiatives at different stages of the value chain with full autonomy. This has been accredited by Capgemini University."
+                },
+                {
+                    id: "bcs-3-0",
+                    name: "BCS 3.0 Delivery Enablement",
+                    issuingBody: "Cisco",
+                    description: "This credential signifies the holder's understanding of the offerings for the latest release of Cisco Business Critical Services, version 3.0."
+                },
+                {
+                    id: "cx-baseline-training",
+                    name: "CX Baseline Training",
+                    issuingBody: "Cisco",
+                    description: "This credential signifies the holder's gain of a Cisco-specific set of Customer Experience foundational skills and knowledge required across all CX roles."
+                }
+            ];
+
             const productsData = [
                 {
+                    id: "splunk-ai-poc",
+                    title: "Talk to Your Data (Splunk AI POC)",
+                    description: "A groundbreaking proof-of-concept enabling natural language interaction with complex data sources like Splunk. This solution leverages an LLM and AWS SageMaker to convert user queries into executable Splunk SPL, making data accessible to technical and non-technical users alike.",
+                    role: "POC Lead / AI Solution Architect",
+                    outcome: "Successfully democratized data exploration, significantly reducing the learning curve and time for query formulation.",
+                    futureVision: "The future vision for this solution includes seamless integration with enterprise systems such as SAP. This will enable organizational-scoped queries, allowing users to extract and analyze data across diverse business functions (e.g., finance, HR, supply chain) using natural language, further enhancing data accessibility and strategic decision-making across the entire organization."
+                },
+                {
+                    id: "rag-ai-knowledge-bot",
                     title: "RAG-based AI Knowledge Bot",
                     description: "An LLM-powered system using a RAG architecture to provide accurate, context-aware answers to complex engineering questions, dramatically reducing incident resolution time.",
                     role: "Product Vision & Launch Leadership",
                     outcome: "92% query accuracy, 60% faster incident resolution."
                 },
                 {
+                    id: "task-operations-manager",
                     title: "Task Operations Manager",
                     description: "An automation platform for intelligent task delegation, featuring queue-based lifecycle management and interactive dashboards to optimize workload distribution.",
                     role: "Product Development & Scaling",
                     outcome: "35% increase in team productivity across functions."
                 },
                 {
+                    id: "cloud-iac",
                     title: "Cloud Infrastructure as Code (IaC)",
                     description: "A suite of reusable Terraform templates for provisioning complex data services (Kafka, Cassandra, RDS) on AWS, enabling rapid, consistent, and compliant deployments.",
                     role: "Infrastructure Architecture & DevOps Lead",
                     outcome: "80% reduction in manual deployment effort for GovCloud."
                 },
                 {
+                    id: "rapid-case-generator",
                     title: "Rapid Case Generator Bot",
                     description: "A user-friendly chatbot utilizing adaptive cards to automate and simplify the creation of support cases, enhancing the support experience for all users.",
                     role: "User Experience Innovation",
                     outcome: "40% faster case creation time."
                 },
                 {
+                    id: "yum-centos-container",
                     title: "Yum-CentOS Container Solution",
                     description: "A containerized service to pre-build and distribute software packages for older Linux environments, decoupling development from slow approval processes.",
                     role: "Infrastructure Platform Development",
                     outcome: "50% reduction in staging server build time."
                 },
                 {
+                    id: "certvisor-notification",
                     title: "CertVisor Notification Service",
                     description: "An automated entitlement monitoring and notification system that proactively alerts stakeholders about certificate expirations and status changes.",
                     role: "Product Ideation & Rollout",
@@ -359,7 +520,7 @@
                     dates: "May 2015 - Present",
                     details: [
                         "Drove product strategy and end-to-end lifecycle for 5+ automation and data platforms, serving thousands of users and processing 50,000+ requests.",
-                        "Led migration of WebEx data services to AWS GovCloud, architecting Infrastructure as Code solutions that reduced manual effort by 80%.",
+                        "Led provisioning of WebEx data services to AWS GovCloud and Air-gapped solutions, architecting Infrastructure as Code solutions that reduced manual effort by 80%.",
                         "Pioneered a GenAI RAG-based bot, improving incident resolution time by 60%.",
                         "Managed and mentored teams of 10+ engineers, implementing Agile methodologies to improve delivery timelines by 15%."
                     ]
@@ -384,6 +545,8 @@
                 }
             ];
 
+            let currentProductIndex = 0; // Start with the first product
+            let currentCertificationIndex = 0; // Start with the first certification
 
             const radarCtx = document.getElementById('skillsRadarChart').getContext('2d');
             new Chart(radarCtx, {
@@ -535,18 +698,99 @@
             impactSelector.addEventListener('change', (e) => updateImpactChart(e.target.value));
             updateImpactChart(impactData[0].name);
 
-            const productsGrid = document.getElementById('products-grid');
-            productsData.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'bg-white p-6 rounded-lg shadow-md card-hover text-left';
-                card.innerHTML = `
-                    <h3 class="font-bold text-xl text-slate-800 mb-2">${product.title}</h3>
-                    <p class="text-amber-600 font-semibold text-sm mb-3">${product.role}</p>
-                    <p class="text-slate-600 mb-4">${product.description}</p>
-                    <p class="font-semibold text-slate-700">Key Outcome: <span class="font-normal text-slate-600">${product.outcome}</span></p>
+            const certificationDisplayArea = document.getElementById('certification-display-area');
+            const nextCertificationBtn = document.getElementById('next-certification-btn');
+            const certificationTitlesList = document.getElementById('certification-titles-list');
+
+            const renderCertificationDisplay = (index) => {
+                const certification = certificationsData[index];
+                if (!certification) return;
+
+                certificationDisplayArea.innerHTML = `
+                    <h3 class="font-bold text-2xl text-slate-800 mb-2">${certification.name}</h3>
+                    <p class="text-amber-600 font-semibold text-base mb-3">${certification.issuingBody}</p>
+                    <p class="text-slate-600">${certification.description}</p>
                 `;
-                productsGrid.appendChild(card);
+
+                // Update active state for titles in the list
+                Array.from(certificationTitlesList.children).forEach((item, idx) => {
+                    if (idx === index) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            };
+
+            // Populate certification titles list
+            certificationsData.forEach((cert, index) => {
+                const titleSpan = document.createElement('span');
+                titleSpan.className = 'title-list-item px-3 py-1 rounded-md hover:bg-slate-100';
+                titleSpan.textContent = cert.name;
+                titleSpan.addEventListener('click', () => {
+                    currentCertificationIndex = index;
+                    renderCertificationDisplay(currentCertificationIndex);
+                });
+                certificationTitlesList.appendChild(titleSpan);
             });
+
+            // "Next" button functionality for certifications
+            nextCertificationBtn.addEventListener('click', () => {
+                currentCertificationIndex = (currentCertificationIndex + 1) % certificationsData.length;
+                renderCertificationDisplay(currentCertificationIndex);
+            });
+
+            // Initial render for certifications
+            renderCertificationDisplay(currentCertificationIndex);
+
+
+            const productDisplayArea = document.getElementById('product-display-area');
+            const nextProductBtn = document.getElementById('next-product-btn');
+            const productTitlesList = document.getElementById('product-titles-list');
+
+            const renderProductDisplay = (index) => {
+                const product = productsData[index];
+                if (!product) return;
+
+                productDisplayArea.innerHTML = `
+                    <h3 class="font-bold text-2xl text-slate-800 mb-2">${product.title}</h3>
+                    <p class="text-amber-600 font-semibold text-base mb-3">${product.role}</p>
+                    <p class="text-slate-600 mb-4">${product.description}</p>
+                    ${product.futureVision ? `<p class="font-semibold text-slate-700 mt-4">Future Vision: <span class="font-normal text-slate-600">${product.futureVision}</span></p>` : ''}
+                    <p class="font-semibold text-slate-700 mt-4">Key Outcome: <span class="font-normal text-slate-600">${product.outcome}</span></p>
+                `;
+
+                // Update active state for titles in the list
+                Array.from(productTitlesList.children).forEach((item, idx) => {
+                    if (idx === index) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            };
+
+            // Populate product titles list
+            productsData.forEach((product, index) => {
+                const titleSpan = document.createElement('span');
+                titleSpan.className = 'title-list-item px-3 py-1 rounded-md hover:bg-slate-100';
+                titleSpan.textContent = product.title;
+                titleSpan.addEventListener('click', () => {
+                    currentProductIndex = index;
+                    renderProductDisplay(currentProductIndex);
+                });
+                productTitlesList.appendChild(titleSpan);
+            });
+
+            // "Next" button functionality
+            nextProductBtn.addEventListener('click', () => {
+                currentProductIndex = (currentProductIndex + 1) % productsData.length;
+                renderProductDisplay(currentProductIndex);
+            });
+
+            // Initial render
+            renderProductDisplay(currentProductIndex);
+
 
             const timelineContainer = document.getElementById('timeline-container');
             timelineData.forEach(item => {
